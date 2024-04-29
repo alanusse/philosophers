@@ -6,7 +6,7 @@
 #    By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/26 13:05:54 by aglanuss          #+#    #+#              #
-#    Updated: 2024/04/29 12:43:04 by aglanuss         ###   ########.fr        #
+#    Updated: 2024/04/29 18:39:59 by aglanuss         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ UTILS = $(wildcard utils/*.c)
 
 INCLUDES = $(wildcard includes/*.h)
 
-SRCS = main.c $(UTILS)
+SRCS = $(wildcard src/*.c) $(UTILS)
 
 OBJS = $(SRCS:.c=.o)
 
