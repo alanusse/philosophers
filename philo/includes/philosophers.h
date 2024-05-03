@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:22:44 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/01 13:12:39 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:22:56 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,16 @@ greater than -1"
 
 typedef struct s_philo
 {
-	pthread_t	*thread;
+	pthread_t	thread;
 	int				id;
 }							t_philo;
 
-int	is_valid_arguments(int argc, char **argv);
+int   init_philos(t_philo ***philos, int num_of_philos);
+void  free_philos(t_philo ***philos);
+
+int   init_forks(pthread_mutex_t **forks, int num_of_forks);
+void  free_forks(pthread_mutex_t **forks);
+
+int   is_valid_arguments(int argc, char **argv);
 
 #endif
