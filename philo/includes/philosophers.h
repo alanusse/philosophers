@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:22:44 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/06 13:22:04 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:47:22 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ typedef struct s_philo
 void	init_philos(t_philo ***philos, int num_of_philos);
 void	free_philos(t_philo ***philos, int num_of_philos);
 
-int   init_forks(pthread_mutex_t **forks, int num_of_forks);
-void  free_forks(pthread_mutex_t **forks);
+void	init_forks(pthread_mutex_t **forks, int num_of_forks);
+void	free_forks(pthread_mutex_t **forks, int num_of_forks);
 
 int   is_valid_arguments(int argc, char **argv);
 
