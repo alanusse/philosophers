@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:07:55 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/07 12:57:03 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:59:55 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
  * 
  * @param argc The count of command line arguments.
  * @param argv The array of command line arguments.
- * @param program A pointer to the pointer of the program structure to initialize.
+ * @param program A pointer to the pointer of the program
+ * structure to initialize.
  */
 static void	init_program(int argc, char **argv, t_program **program)
 {
