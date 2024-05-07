@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:07:55 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/06 14:33:57 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:57:03 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,62 @@
 #include "../includes/utils.h"
 
 /**
- * Initialize philos and forks variables.
- * If any of variables fails, free both and return 0, else return 1.
-*/
-static int	init_variables(t_philo ***philos, pthread_mutex_t **forks, int num_of_philos)
+ * Initializes a program structure with values from command line arguments.
+ * This includes allocating and setting up associated philosophers and forks
+ * based on the given number of philosophers. The function handles memory
+ * allocation failures by cleaning up any partially allocated resources and
+ * ensures that the program pointer is set to NULL to prevent
+ * dangling pointers. This function has no return value but ensures that the
+ * program is either fully initialized or completely cleaned up with the
+ * program pointer set to NULL on failure.
+ * 
+ * @param argc The count of command line arguments.
+ * @param argv The array of command line arguments.
+ * @param program A pointer to the pointer of the program structure to initialize.
+ */
+static void	init_program(int argc, char **argv, t_program **program)
 {
-	init_philos(philos, num_of_philos);
-	if (!*philos)
-		return (0);
-	init_forks(forks, num_of_philos);
-	if (!*forks)
+	*program = malloc(sizeof(t_program));
+	if (!*program)
+		return ;
+	(*program)->num_of_philos = ft_atoi(argv[1]);
+	(*program)->time_to_die = ft_atoi(argv[2]);
+	(*program)->time_to_eat = ft_atoi(argv[3]);
+	(*program)->time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		(*program)->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+	init_philos(&(*program)->philos, (*program)->num_of_philos);
+	if (!(*program)->philos)
 	{
-		free_philos(philos, num_of_philos);
-		return (0);
+		free(*program);
+		*program = NULL;
+		return ;
 	}
-	return (1);
+	init_forks(&(*program)->forks, (*program)->num_of_philos);
+	if (!(*program)->forks)
+	{
+		free_philos(&(*program)->philos, (*program)->num_of_philos);
+		free(*program);
+		*program = NULL;
+		return ;
+	}
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo					**philos;
-	pthread_mutex_t	*forks;
-	int							num_of_philos;
+	t_program				*program;
 
 	if (!is_valid_arguments(argc, argv))
 	{
 		printf("%s\n", USAGE_MESSAGE);
 		return (EXIT_FAILURE);
 	}
-	philos = NULL;
-	forks = NULL;
-	num_of_philos = ft_atoi(argv[1]);
-	if(!init_variables(&philos, &forks, num_of_philos))
+	program = NULL;
+	init_program(argc, argv, &program);
+	if(!program)
 		return (EXIT_FAILURE);
-	free_philos(&philos, num_of_philos);
-	free_forks(&forks, num_of_philos);
+	free_philos(&program->philos, program->num_of_philos);
+	free_forks(&program->forks, program->num_of_philos);
+	free(program);
 	return (0);
 }
