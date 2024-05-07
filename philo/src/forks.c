@@ -6,12 +6,22 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:59:58 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/06 14:34:38 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:43:08 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
+/**
+ * Frees an array of mutexes (forks) and destroys each mutex.
+ * Assumes that all mutexes were previously initialized.
+ * Iterates through each mutex, destroying them individually before freeing
+ * the entire array and setting the pointer to NULL to prevent dangling
+ * pointer usage.
+ * 
+ * @param forks Pointer to the array of mutexes to be freed.
+ * @param num_of_forks Number of mutexes in the array.
+ */
 void  free_forks(pthread_mutex_t **forks, int num_of_forks)
 {
   int i;
@@ -25,6 +35,18 @@ void  free_forks(pthread_mutex_t **forks, int num_of_forks)
   *forks = NULL;
 }
 
+/**
+ * Initializes and allocates memory for an array of mutexes (forks).
+ * Each mutex is initialized individually. 
+ * If any initialization fails, all previously initialized mutexes are
+ * destroyed to ensure proper cleanup, and the memory for the array is freed,
+ * setting the pointer to NULL to prevent future use.
+ * This ensures robust error handling and proper resource
+ * cleanup in case of failure.
+ * 
+ * @param forks Pointer to the array of mutexes to be initialized.
+ * @param num_of_forks Number of mutexes to initialize in the array.
+ */
 void  init_forks(pthread_mutex_t **forks, int num_of_forks)
 {
   int i;
