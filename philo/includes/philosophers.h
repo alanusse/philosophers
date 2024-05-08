@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:22:44 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/07 11:51:05 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/08 13:38:33 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ greater than -1"
 
 typedef struct s_philo
 {
-	pthread_t	thread;
 	int				id;
+	pthread_t	thread;
+  pthread_mutex_t *rigth_fork;
+  pthread_mutex_t *left_fork;
 }							t_philo;
 
 typedef struct s_program
@@ -42,7 +44,7 @@ typedef struct s_program
 	int							number_of_times_each_philosopher_must_eat;
 }							t_program;
 
-void	init_philos(t_philo ***philos, int num_of_philos);
+void	init_philos(t_philo ***philos, pthread_mutex_t **forks, int num_of_philos);
 void	free_philos(t_philo ***philos, int num_of_philos);
 
 void	init_forks(pthread_mutex_t **forks, int num_of_forks);

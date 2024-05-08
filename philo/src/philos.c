@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:58:29 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/07 12:46:33 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:03:03 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,35 @@
  * @param philos Pointer to the array of philosopher pointers to be freed.
  * @param num_of_philos Number of philosopher pointers in the array.
  */
-void  free_philos(t_philo ***philos, int num_of_philos)
+void	free_philos(t_philo ***philos, int num_of_philos)
 {
-  int i;
+	int	i;
 
-  i = -1;
-  if (!*philos)
-    return ;
-  while ((*philos)[++i] && i < num_of_philos)
+	i = -1;
+	if (!*philos)
+		return;
+	while ((*philos)[++i] && i < num_of_philos)
+	{
+		free((*philos)[i]);
+		(*philos)[i] = NULL;
+	}
+	free(*philos);
+	*philos = NULL;
+}
+
+static void set_forks(t_philo ***philos, pthread_mutex_t **forks, int index,
+  int num_of_philos)
+{
+  if (index == 0)
   {
-    free((*philos)[i]);
-    (*philos)[i] = NULL;
+    (*philos)[index]->rigth_fork = forks[num_of_philos - 1];
+    (*philos)[index]->left_fork = forks[0];
   }
-  free(*philos);
-  *philos = NULL;
+  else
+  {
+    (*philos)[index]->rigth_fork = forks[index - 1];
+    (*philos)[index]->left_fork = forks[index];
+  }
 }
 
 /**
@@ -49,25 +64,26 @@ void  free_philos(t_philo ***philos, int num_of_philos)
  * @param philos Pointer to the array of philosopher pointers to be initialized.
  * @param num_of_philos Number of philosophers to initialize in the array.
  */
-void  init_philos(t_philo ***philos, int num_of_philos)
+void init_philos(t_philo ***philos, pthread_mutex_t **forks, int num_of_philos)
 {
 	int i;
 
 	*philos = malloc(sizeof(t_philo *) * num_of_philos);
-  if (!*philos)
-    return ;
+	if (!*philos)
+		return;
 	i = -1;
-  while (++i < num_of_philos)
-    (*philos)[i] = NULL;
+	while (++i < num_of_philos)
+		(*philos)[i] = NULL;
 	i = -1;
 	while (++i < num_of_philos)
 	{
-    (*philos)[i] = malloc(sizeof(t_philo));
-    if (!(*philos)[i])
-    {
-      free_philos(philos, num_of_philos);
-      return ;
-    }
+		(*philos)[i] = malloc(sizeof(t_philo));
+		if (!(*philos)[i])
+		{
+			free_philos(philos, num_of_philos);
+			return;
+		}
 		(*philos)[i]->id = i + 1;
+    set_forks(philos, forks, i, num_of_philos);
 	}
 }

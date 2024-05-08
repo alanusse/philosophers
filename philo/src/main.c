@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:07:55 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/07 12:59:55 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/08 13:40:16 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ static void	init_program(int argc, char **argv, t_program **program)
 	(*program)->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
 		(*program)->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
-	init_philos(&(*program)->philos, (*program)->num_of_philos);
-	if (!(*program)->philos)
+  init_forks(&(*program)->forks, (*program)->num_of_philos);
+	if (!(*program)->forks)
 	{
 		free(*program);
 		*program = NULL;
 		return ;
 	}
-	init_forks(&(*program)->forks, (*program)->num_of_philos);
-	if (!(*program)->forks)
+	init_philos(&(*program)->philos, &(*program)->forks, (*program)->num_of_philos);
+	if (!(*program)->philos)
 	{
-		free_philos(&(*program)->philos, (*program)->num_of_philos);
+    free_forks(&(*program)->forks, (*program)->num_of_philos);
 		free(*program);
 		*program = NULL;
 		return ;
@@ -67,10 +67,10 @@ int	main(int argc, char **argv)
 	}
 	program = NULL;
 	init_program(argc, argv, &program);
-	if(!program)
+	if (!program)
 		return (EXIT_FAILURE);
-	free_philos(&program->philos, program->num_of_philos);
 	free_forks(&program->forks, program->num_of_philos);
+	free_philos(&program->philos, program->num_of_philos);
 	free(program);
 	return (0);
 }
