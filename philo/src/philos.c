@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:58:29 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/08 14:03:03 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/12 12:46:49 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ void	free_philos(t_philo ***philos, int num_of_philos)
 	*philos = NULL;
 }
 
+/**
+ * Assigns forks to philosophers in a circular dining arrangement to
+ * prevent deadlock. For the first philosopher, the right fork is
+ * the last in the array and the left fork is the first.
+ * For all other philosophers, the right fork is immediately to
+ * their left, and their left fork is at their own index.
+ *
+ * @param philos Triple pointer to the array of philosopher structures.
+ * @param forks Double pointer to the array of mutexes representing forks.
+ * @param index Index of the current philosopher.
+ * @param num_of_philos Total number of philosophers.
+ */
 static void set_forks(t_philo ***philos, pthread_mutex_t **forks, int index,
   int num_of_philos)
 {
