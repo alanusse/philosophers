@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:58:29 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/12 12:46:49 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/12 13:43:34 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@ void	free_philos(t_philo ***philos, int num_of_philos)
 	*philos = NULL;
 }
 
+void	*philo_routine(void *philo)
+{
+	/**
+	 * 1 - eat
+	 * 2 - sleep
+	 * 3 - think
+	*/
+}
+
 /**
  * Assigns forks to philosophers in a circular dining arrangement to
  * prevent deadlock. For the first philosopher, the right fork is
@@ -50,8 +59,8 @@ void	free_philos(t_philo ***philos, int num_of_philos)
  * @param index Index of the current philosopher.
  * @param num_of_philos Total number of philosophers.
  */
-static void set_forks(t_philo ***philos, pthread_mutex_t **forks, int index,
-  int num_of_philos)
+static void assign_forks_to_philo(t_philo ***philos, pthread_mutex_t **forks,
+int index, int num_of_philos)
 {
   if (index == 0)
   {
@@ -76,13 +85,14 @@ static void set_forks(t_philo ***philos, pthread_mutex_t **forks, int index,
  * @param philos Pointer to the array of philosopher pointers to be initialized.
  * @param num_of_philos Number of philosophers to initialize in the array.
  */
-void init_philos(t_philo ***philos, pthread_mutex_t **forks, int num_of_philos)
+void init_philos(t_program **program, t_philo ***philos, pthread_mutex_t **forks,
+	int num_of_philos)
 {
 	int i;
 
 	*philos = malloc(sizeof(t_philo *) * num_of_philos);
 	if (!*philos)
-		return;
+		return ;
 	i = -1;
 	while (++i < num_of_philos)
 		(*philos)[i] = NULL;
@@ -91,11 +101,12 @@ void init_philos(t_philo ***philos, pthread_mutex_t **forks, int num_of_philos)
 	{
 		(*philos)[i] = malloc(sizeof(t_philo));
 		if (!(*philos)[i])
-		{
-			free_philos(philos, num_of_philos);
-			return;
-		}
+			return (free_philos(philos, num_of_philos));
 		(*philos)[i]->id = i + 1;
-    set_forks(philos, forks, i, num_of_philos);
+    assign_forks_to_philo(philos, forks, i, num_of_philos);
+		(*philos)[i]->time_to_die = &(*program)->time_to_die;
+		(*philos)[i]->time_to_eat = &(*program)->time_to_eat;
+		(*philos)[i]->number_of_times_each_philosopher_must_eat \
+			= &(*program)->number_of_times_each_philosopher_must_eat;
 	}
 }

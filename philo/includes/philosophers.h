@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:22:44 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/08 13:38:33 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/12 13:36:57 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ typedef struct s_philo
 	pthread_t	thread;
   pthread_mutex_t *rigth_fork;
   pthread_mutex_t *left_fork;
+	int							*time_to_die;
+	int							*time_to_eat;
+	int							*time_to_sleep;
+	int							*number_of_times_each_philosopher_must_eat;
 }							t_philo;
 
 typedef struct s_program
@@ -44,7 +48,7 @@ typedef struct s_program
 	int							number_of_times_each_philosopher_must_eat;
 }							t_program;
 
-void	init_philos(t_philo ***philos, pthread_mutex_t **forks, int num_of_philos);
+void init_philos(t_program **program, t_philo ***philos, pthread_mutex_t **forks, int num_of_philos);
 void	free_philos(t_philo ***philos, int num_of_philos);
 
 void	init_forks(pthread_mutex_t **forks, int num_of_forks);
