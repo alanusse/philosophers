@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:07:55 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/12 13:39:15 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/22 00:49:37 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	init_program(int argc, char **argv, t_program **program)
 		*program = NULL;
 		return ;
 	}
-	init_philos(program, &(*program)->philos, &(*program)->forks,
+	init_philos(program, &(*program)->philos, (*program)->forks,
 		(*program)->num_of_philos);
 	if (!(*program)->philos)
 	{
@@ -71,8 +71,9 @@ int	main(int argc, char **argv)
 	init_program(argc, argv, &program);
 	if (!program)
 		return (EXIT_FAILURE);
-	free_forks(&program->forks, program->num_of_philos);
-	free_philos(&program->philos, program->num_of_philos);
+	start_philos_routine(&program);
+	// free_forks(&program->forks, program->num_of_philos);
+	// free_philos(&program->philos, program->num_of_philos);
 	free(program);
 	return (0);
 }

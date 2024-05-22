@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:22:44 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/12 13:36:57 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:11:03 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@ greater than -1"
 
 typedef struct s_philo
 {
-	int				id;
-	pthread_t	thread;
-  pthread_mutex_t *rigth_fork;
-  pthread_mutex_t *left_fork;
-	int							*time_to_die;
-	int							*time_to_eat;
-	int							*time_to_sleep;
-	int							*number_of_times_each_philosopher_must_eat;
+	int							id;
+	pthread_t				thread;
+  pthread_mutex_t rigth_fork;
+  pthread_mutex_t left_fork;
+	int							eat_times;
+	size_t					last_meal;
+	int							*time_to_die; // todo: change without pointer
+	int							*time_to_eat; // todo: change without pointer
+	size_t					*time_to_sleep; // todo: change without pointer
+	int							*number_of_times_each_philosopher_must_eat; // todo: change without pointer
 }							t_philo;
 
 typedef struct s_program
@@ -44,12 +46,16 @@ typedef struct s_program
 	int							num_of_philos;
 	int							time_to_die;
 	int							time_to_eat;
-	int							time_to_sleep;
+	size_t					time_to_sleep;
 	int							number_of_times_each_philosopher_must_eat;
 }							t_program;
 
-void init_philos(t_program **program, t_philo ***philos, pthread_mutex_t **forks, int num_of_philos);
+void	init_philos(t_program **program, t_philo ***philos, pthread_mutex_t *forks, int num_of_philos);
 void	free_philos(t_philo ***philos, int num_of_philos);
+void	philo_eat(t_philo **philo);
+void	philo_sleep(t_philo **philo);
+void	philo_think(t_philo **philo);
+void	start_philos_routine(t_program **program);
 
 void	init_forks(pthread_mutex_t **forks, int num_of_forks);
 void	free_forks(pthread_mutex_t **forks, int num_of_forks);
