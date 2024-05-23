@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:07:55 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/22 00:49:37 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/23 11:12:50 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	init_program(int argc, char **argv, t_program **program)
 	*program = malloc(sizeof(t_program));
 	if (!*program)
 		return ;
+  (*program)->philo_died = 0;
 	(*program)->num_of_philos = ft_atoi(argv[1]);
 	(*program)->time_to_die = ft_atoi(argv[2]);
 	(*program)->time_to_eat = ft_atoi(argv[3]);

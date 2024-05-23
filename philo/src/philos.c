@@ -6,11 +6,12 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:58:29 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/22 14:11:24 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:14:52 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
+#include "../includes/utils.h"
 
 /**
  * Frees an array of philosophers, ensuring each philosopher's structure
@@ -38,17 +39,51 @@ void	free_philos(t_philo ***philos, int num_of_philos)
 	*philos = NULL;
 }
 
+int is_philo_died(t_philo **philo)
+{
+  if (!(*(*philo)->philo_died))
+    return (0);
+  else
+    return (1);
+}
+
 void	*philo_routine(void *philo)
 {
-	/**
-	 * 1 - eat
-	 * 2 - sleep
-	 * 3 - think
-	*/
-	philo_eat((t_philo **)philo);
-	philo_sleep((t_philo **)philo);
-	philo_think((t_philo **)philo);
+  t_philo **p = (t_philo **)philo;
+  
+  while (!is_philo_died(p))
+  {
+    if (philo_eat(p) == 0)
+      return (NULL);
+    if (philo_sleep(p) == 0)
+      return (NULL);
+    if (philo_think(p) == 0)
+      return (NULL);
+  }
 	return NULL;
+}
+
+void *died_monitor_routine(void *program)
+{
+  t_program **p;
+  int         i;
+
+  p = (t_program **)program;
+  while ((*p)->philo_died == 0)
+  {
+    i = 0;
+    while (i < (*p)->num_of_philos)
+    {
+      if ((*p)->philos[i]->last_meal != 0 && (get_current_time() - (*p)->philos[i]->last_meal) >= (*p)->time_to_die)
+      {
+        printf("%zi %i died\n", get_current_time(), (*p)->philos[i]->id);
+        (*p)->philo_died = 1;
+        return (NULL);
+      }
+      i++;
+    }
+  }
+  return (NULL);
 }
 
 void	start_philos_routine(t_program **program)
@@ -58,9 +93,11 @@ void	start_philos_routine(t_program **program)
 	i = -1;
 	while (++i < (*program)->num_of_philos)
 		pthread_create(&((*program)->philos[i]->thread), NULL, philo_routine, (void *)&(*program)->philos[i]);
+  pthread_create(&((*program)->died_monitor), NULL, died_monitor_routine, (void *)program);
 	i = -1;
 	while (++i < (*program)->num_of_philos)
 		pthread_join((*program)->philos[i]->thread, NULL);
+  pthread_join((*program)->died_monitor, NULL);
 }
 
 /**
@@ -120,6 +157,8 @@ void init_philos(t_program **program, t_philo ***philos, pthread_mutex_t *forks,
 			return (free_philos(philos, num_of_philos));
 		(*philos)[i]->id = i + 1;
     assign_forks_to_philo(philos, forks, i, num_of_philos);
+    (*philos)[i]->philo_died = &(*program)->philo_died;
+    (*philos)[i]->last_meal = 0;
 		(*philos)[i]->time_to_die = &(*program)->time_to_die;
 		(*philos)[i]->time_to_eat = &(*program)->time_to_eat;
 		(*philos)[i]->time_to_sleep = &(*program)->time_to_sleep;
