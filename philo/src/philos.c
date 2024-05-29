@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:58:29 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/23 13:14:52 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:01:11 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	*philo_routine(void *philo)
 {
   t_philo **p = (t_philo **)philo;
   
+  (*p)->last_meal = get_current_time();
   while (!is_philo_died(p))
   {
     if (philo_eat(p) == 0)
@@ -76,8 +77,9 @@ void *died_monitor_routine(void *program)
     {
       if ((*p)->philos[i]->last_meal != 0 && (get_current_time() - (*p)->philos[i]->last_meal) >= (*p)->time_to_die)
       {
-        printf("%zi %i died\n", get_current_time(), (*p)->philos[i]->id);
+        unlock_forks(&((*p)->forks), (*p)->num_of_philos);
         (*p)->philo_died = 1;
+        printf("%zi %i died\n", get_current_time(), (*p)->philos[i]->id);
         return (NULL);
       }
       i++;
@@ -117,13 +119,13 @@ int index, int num_of_philos)
 {
   if (index == 0)
   {
-    (*philos)[index]->rigth_fork = forks[num_of_philos - 1];
-    (*philos)[index]->left_fork = forks[0];
+    (*philos)[index]->rigth_fork = &forks[num_of_philos - 1];
+    (*philos)[index]->left_fork = &forks[0];
   }
   else
   {
-    (*philos)[index]->rigth_fork = forks[index - 1];
-    (*philos)[index]->left_fork = forks[index];
+    (*philos)[index]->rigth_fork = &forks[index - 1];
+    (*philos)[index]->left_fork = &forks[index];
   }
 }
 

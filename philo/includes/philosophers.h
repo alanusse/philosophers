@@ -6,7 +6,7 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 13:22:44 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/23 13:05:27 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:01:05 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ typedef struct s_philo
 {
 	int							id;
 	pthread_t				thread;
-  pthread_mutex_t rigth_fork;
-  pthread_mutex_t left_fork;
+  pthread_mutex_t *rigth_fork;
+  pthread_mutex_t *left_fork;
   int             *philo_died;
 	int							eat_times;
 	size_t					last_meal;
@@ -63,6 +63,7 @@ int   is_philo_died(t_philo **philo);
 
 void	init_forks(pthread_mutex_t **forks, int num_of_forks);
 void	free_forks(pthread_mutex_t **forks, int num_of_forks);
+void  unlock_forks(pthread_mutex_t **forks, int num_of_forks);
 
 int   is_valid_arguments(int argc, char **argv);
 

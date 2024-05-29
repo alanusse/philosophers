@@ -6,11 +6,23 @@
 /*   By: aglanuss <aglanuss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 10:59:58 by aglanuss          #+#    #+#             */
-/*   Updated: 2024/05/07 12:43:08 by aglanuss         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:02:15 by aglanuss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
+
+void  unlock_forks(pthread_mutex_t **forks, int num_of_forks)
+{
+  int i;
+
+  i = 0;
+  while (i < num_of_forks)
+  {
+    pthread_mutex_unlock(&(*forks)[i]);
+    i++;
+  }
+}
 
 /**
  * Frees an array of mutexes (forks) and destroys each mutex.
